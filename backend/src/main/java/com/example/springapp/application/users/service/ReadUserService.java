@@ -24,4 +24,13 @@ public class ReadUserService {
                 user.getMail());
     }
 
+    @Transactional
+    public UserViewModel readUserByMail(String mail) {
+        User user = this.userRepository.findByMail(mail)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + mail));
+
+        return UserViewModel.adaptToUserVewModel(user.getId(), user.getFamilyName(), user.getFirstName(),
+                user.getMail());
+    }
+
 }

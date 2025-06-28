@@ -20,11 +20,15 @@ public class SecurityConfig {
                         .ignoringRequestMatchers("/users/create")  // CSRFを無効化するURLを指定
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login","/users/create","/register","/error").permitAll()  // 指定のリクエストは認証なしで許可します
+                        .requestMatchers("/login","/users/create","/register").permitAll()  // 指定のリクエストは認証なしで許可します
                         .anyRequest().authenticated()  // 他のページは認証が必要
                 )
                 .formLogin(form -> form
                         .loginPage("/login")  // カスタムログインページを指定
+                        .usernameParameter("mail")  // ユーザー名パラメータをmailに設定
+                        .passwordParameter("password")  // パスワードパラメータを明示的に設定
+                        .defaultSuccessUrl("/", true)  // ログイン成功時はindex.htmlに遷移
+                        .failureUrl("/login?error=true")  // ログイン失敗時はエラーパラメータ付きでログインページに戻る
                         .permitAll()  // ログインページは認証なしで許可します
                 )
                 .logout(logout -> logout
